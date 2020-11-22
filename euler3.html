@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>Задача 3. Наибольший простой делитель</title>
+</head>
+
+<body>
+   <p>Простые делители числа 13195 - это 5, 7, 13 и 29.</p>
+   <p>Каков самый большой делитель числа 600851475143, являющийся простым числом?</p>
+   <script>
+      var test_values = [2, 3, 5, 7, 13195, 600851475143];
+
+      function run_function(func, test_values)
+      {
+         for (var i in test_values)
+         {
+            console.log('Test value:', test_values[i]);
+            var t0 = performance.now();
+            console.log('Output:', func(test_values[i]));
+
+            console.log();
+         }
+      }
+
+      function largestPrimeFactor(number)
+      {
+         //только четное простое число равно 2. Все остальные четные числа делятся на 2.
+         if (number % 2 === 0)
+         {
+            return 2;
+         }
+
+         var list_of_prime_numbers = [];
+         var i = 3;
+
+         // проверяем деление входного числа и переменной i
+         // если деление без напоминания, это одно из простых чисел
+         // если нет, увеличиваем i на 2, чтобы проверить следующее нечетное число
+
+         while (number != 1)
+         {
+            if (number % i === 0)
+            {
+               number /= i;
+               list_of_prime_numbers.push(i);
+            }
+            else
+            {
+               i += 2; // увеличиваем на 2, чтобы проверить следующее нечетное число
+            }
+         }
+
+         return list_of_prime_numbers[list_of_prime_numbers.length - 1];
+      }
+
+      run_function(largestPrimeFactor, test_values);
+   </script>
+</body>
+
+</html>
