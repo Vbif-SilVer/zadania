@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		#field td {
+		width: 100px;
+		height: 100px;
+		border: 1px solid black;
+		text-align: center;
+		font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<table id="field">
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	</table>
+	<script>
+	function start(cells) {
+	let i = 0;	
+	for (let cell of cells) {
+		cell.addEventListener('click', function step() {
+			if (i % 2 == 0) {
+				this.innerHTML = 'X'; // при нажатии на клетку, появляется "X" или крестик, без этой строки будут появлятся пустые клетки
+			} else {
+				this.innerHTML = '0'; // при нажатии на клетку, появляется "0" или нолик, без этой строки будут появлятся пустые клетки
+			}
+			this.removeEventListener('click', step);// без этой строки при нажатии на уже нажатую клетку будет меняться знак, но если нажимать на одну клетку 8 раз, то выдается сообщение о ничье
+			if (isVictory(cells)) {
+				alert("Победили "+this.innerHTML); // выводим имя победителя
+			}
+			else if (i == 8) {// если заполнилось 8 клеток без комбинации победы, выдается сообщение о ничье
+				alert('ничья');
+			}			
+			i++;  //без этой строки будут выводится одинаковые знаки
+		});
+	}
+	}
+	function isVictory(cells) {
+	let combs = [// комбинация для победы
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8],
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6]
+	];
+	for (let comb of combs) {
+		if (
+			cells[comb[0]].innerHTML == cells[comb[1]].innerHTML && //без этой строки при первом нажатии выдается сообщение о победе крестиков
+			cells[comb[1]].innerHTML == cells[comb[2]].innerHTML && //без этой строки выдается сообщение о ничье при трёх крестиках и двух ноликах
+			cells[comb[0]].innerHTML != ''
+		) {
+			return true;
+		}
+	}
+	return false;
+	}
+	let cells = document.querySelectorAll('#field td')
+	start(cells)	
+	</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+			body {
+			height: 300px;
+		}
+		</style>
+		<style>
+			#parent {
+			text-align: center;
+		}
+		#field {
+			display: inline-block;
+		}		
+		#field td {
+			padding: 20px;
+			border: 1px solid black;
+			cursor: pointer;
+		}
+		.active {
+			background: red;
+		}
+		</style>
+	</head>
+	<body>
+		<div>
+			<table id="field"></table>
+		</div>
+		
+		<script>
+		function start(size) { 
+			activate(build(field, prepare(size)), size);
+		}
+
+		let field = document.querySelector('#field');
+
+		start(2); //устанавливается количество клеток по умолчанию, после всех заполненых клеток, увеличивается значение
+				
+		function build(field, arr) { //функция регулирует количество клеток
+			field.innerHTML = ''; // после всех заполненых клеток генерируется следующие клетки, без этого оно сгенерирует клетки ниже
+			let cells = [];			
+			for (let sub of arr) {
+				let tr = document.createElement('tr');				
+				for (let num of sub) {
+					let td = document.createElement('td');
+					td.innerHTML = num; //генерирует числа внутри клеток
+					tr.appendChild(td);
+					
+					cells.push(td);// закрашивает клетки
+				}				
+				field.appendChild(tr);
+			}			
+			return cells;
+		}
+		
+		function activate(cells, size) {
+			let counter = 1;// первое число которое заполнится
+			for (let cell of cells) {
+				cell.addEventListener('click', function() { //
+					if (this.innerHTML == counter) {
+						this.classList.add('active');				
+						if (counter == size * size) {
+							start(++size);
+						}
+						counter++;
+					}
+				});
+			}
+		}
+		
+		function prepare(size) {
+			let arr = [];
+			arr = range(size * size);
+			arr = shuffle(arr); // генерирует числа и, возможно, клетки, в случайном порядке
+			arr = chunk(arr, size);
+			return arr;
+		}
+		
+		function range(count) {
+			let arr = [];
+			for (let i = 1; i <= count; i++) {
+				arr.push(i);
+			}
+			return arr;
+		}
+		
+		function shuffle(arr) {
+			let result = [];
+			let length = arr.length;
+			for (let i = 0; i < length; i++) {
+				let random = getRandomInt(0, arr.length - 1);
+				let elem = arr.splice(random, 1)[0];
+				result.push(elem);
+			}
+			return result;
+		}
+
+		function chunk(arr, n) {
+			let result = [];
+			let count = Math.ceil(arr.length / n);
+			for (let i = 0; i < count; i++) {
+				let elems = arr.splice(0, n);
+				result.push(elems);
+			}
+			return result;
+		}
+		
+		function getRandomInt(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min; //генерирует числа и, возможно, клетки, в случайном порядке
+		}
+		</script>
+</body>
+</html>
